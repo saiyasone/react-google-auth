@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { gapi } from "gapi-script";
-import GoogleLogin, { GoogleLogout } from "react-google-login";
+import { GoogleLogout, GoogleLogin } from "react-google-login";
+// import {google} from "googleapis";
 
 export default function GoogleAuth() {
   const clientId =
-    "651793147491-mngrlnar5bm1chtmrlld2rblqeduc603.apps.googleusercontent.com";
-  // const secret = "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";
+    "1082232868915-2i631rlglf8afl8b0ov12bnku6tpbf8t.apps.googleusercontent.com";
 
   const [profile, setProfile] = useState(null);
 

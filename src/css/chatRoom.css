@@ -168,6 +168,11 @@
   border-radius: 50%;
   object-fit: cover;
 }
+
+.home .container-info .sidebar .navbar .user span {
+  color: #fff;
+}
+
 .home .container-info .sidebar .navbar .user button {
   background-color: #5d5b8d;
   color: #ddddf7;
@@ -246,6 +251,7 @@
   padding: 10px;
   height: calc(100% - 160px);
   overflow: scroll;
+  overflow-x: hidden;
 }
 .home .container-info .chat .messages .message {
   display: flex;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase-config";
-import "../css/chat.css";
+import "../css/chatRoom.css";
 
 export default function Login() {
   const [err, setErr] = useState(false);
@@ -15,7 +15,7 @@ export default function Login() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       setErr(true);
     }

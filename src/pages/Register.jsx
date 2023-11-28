@@ -1,15 +1,49 @@
 import { useRef, useState } from "react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { Link } from "react-router-dom";
 import addImg from "../assets/icons/icon_img.png";
 import imgList from "../assets/icons/icon_img-list.png";
-import "../css/chat.css";
+import "../css/chatRoom.css";
+import { auth, dbFire, storage } from "../firebase-config";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function Register() {
+  const [err, setError] = useState(false);
   const [file, setFile] = useState(null);
   const fileRef = useRef();
 
-  function submitForm(event) {
+  async function submitForm(event) {
     event.preventDefault();
+    const displayName = event.target[0].value;
+    const email = event.target[1].value;
+    const password = event.target[2].value;
+    const file = event.target[3].files[0];
+
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const storageRef = ref(storage, displayName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        (err) => {
+          setError(true);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (download) => {
+            // console.log("File Available: " + download);
+            await updateProfile(res.user, { displayName, photoURL: download });
+            await setDoc(doc(dbFire, "users", res.user.uid), {
+              uid: res.user.uid,
+              displayName,
+              email,
+              photoURL: download,
+            });
+          });
+        }
+      );
+    } catch (error) {
+      setError(true);
+    }
   }
 
   function handleFileUpload(event) {
@@ -70,6 +104,7 @@ export default function Register() {
             />
 
             <button type="submit">Sign up</button>
+            {err && "Something went wrong"}
           </form>
 
           <p>

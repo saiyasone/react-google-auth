@@ -11,26 +11,18 @@ export default function Header() {
           </div>
           <ul>
             <li>
-              <NavLink to="/" activeClass="active">
-                Room
-              </NavLink>
+              <NavLink to="/">Room</NavLink>
             </li>
             <li>
-              <NavLink to="/chat-room" activeClass="active">
-                Chat
-              </NavLink>
+              <NavLink to="/chat-room">Chat</NavLink>
             </li>
             <li>
-              <NavLink to="/login" activeClass="active" className="btn-action">
+              <NavLink to="/login" className="btn-action">
                 Login
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/register"
-                activeClass="active"
-                className="btn-action"
-              >
+              <NavLink to="/register" className="btn-action">
                 Register
               </NavLink>
             </li>

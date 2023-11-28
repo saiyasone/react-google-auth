@@ -1,4 +1,7 @@
-import { createContext } from "react";
+import { useEffect } from "react";
+import { createContext, useState } from "react";
+import { auth } from "../firebase-config";
+import { onAuthStateChanged } from "firebase/auth";
 
 const initialState = {
   isAuthenticated: false,
@@ -7,9 +10,9 @@ const initialState = {
 
 const SIGN_IN = "signIn";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
-const authReducer = (state, action) => {
+const AuthReducer = (state, action) => {
   switch (action.type) {
     case SIGN_IN:
       break;
@@ -20,13 +23,27 @@ const authReducer = (state, action) => {
 };
 
 const AuthProvider = ({ children }) => {
-  const isAuthenticated = "auth-token";
-  const counter = 0;
+  const [isAuth, setIsAuth] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+        setIsAuth(true);
+      }
+    });
+
+    return () => {
+      unsub();
+    };
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated,
-        counter,
+        isAuth,
+        currentUser,
       }}
     >
       {children}

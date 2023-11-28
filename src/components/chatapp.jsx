@@ -7,8 +7,8 @@ import {
   where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { auth, dbFire } from "./firebase-config";
-import "./chat.css";
+import { auth, dbFire } from "../firebase-config";
+import "../chat.css";
 
 export default function ChatApp(props) {
   const [newMessage, setNewMessage] = useState("");
@@ -50,10 +50,7 @@ export default function ChatApp(props) {
       <div className="py-2">
         {messages.map((msg) => (
           <div className="message" key={msg.id}>
-            <span className="user">
-              {" "}
-              {msg.user}
-            </span>
+            <span className="user"> {msg.user}</span>
             {msg.text}
           </div>
         ))}

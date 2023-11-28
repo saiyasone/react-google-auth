@@ -1,0 +1,54 @@
+header {
+  padding: 1rem 0.5em;
+  background-color: #252d48;
+}
+
+.header-container {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header nav .logo a {
+  font-size: 2rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #fff;
+}
+
+header nav ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+header nav ul li a {
+  font-size: 1rem;
+  text-decoration: none;
+  color: #fff;
+}
+
+header nav ul li a:hover,
+header nav ul li a.active {
+  border-bottom: 1px solid #fff;
+}
+
+header nav ul li .btn-action {
+  color: #252d48;
+  border: 0;
+  outline: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+header nav ul li a .btn-login {
+  margin-left: 2rem;
+}

@@ -7,11 +7,13 @@ import Register from "./pages/Register";
 import RegisterAPI from "./components/chatAPI/register";
 import LoginAPI from "./components/chatAPI/login";
 import ChatRoom from "./pages/chatRoom";
-import { AuthContext, AuthProvider } from "./context/AuthContext";
-import { useContext, useEffect } from "react";
+import { AuthContext } from "./context/AuthContext";
+import { useContext } from "react";
 import ChatAPI from "./pages/ChatAPI";
+import { ChatProvider } from "./context/ChatContext";
+
+import { ProtectRouteAPI } from "./guard/Auth";
 import useAuth from "./hooks/useAuth";
-import { ChatContext, ChatProvider } from "./context/ChatContext";
 
 const ProtectRoute = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
@@ -24,28 +26,16 @@ const ProtectRoute = ({ children }) => {
 };
 
 export default function App() {
-  const navigate = useNavigate();
-  const {} = useContext(AuthContext);
-
-  const ProtectRouteAPI = ({ children }) => {
-    const { isAuthenticate } = useAuth();
-    if (!isAuthenticate) {
-      return navigate("/login-api");
-    }
-    return children;
-  };
-
+  const { user } = useAuth();
   return (
-    <AuthProvider>
+    <ChatProvider user={user}>
       <Routes>
         <Route path="" element={<Home />} />
         <Route
           path="chat-api"
           element={
             <ProtectRouteAPI>
-              {/* <ChatProvider> */}
               <ChatAPI />
-              {/* </ChatProvider> */}
             </ProtectRouteAPI>
           }
         />
@@ -62,6 +52,6 @@ export default function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
       </Routes>
-    </AuthProvider>
+    </ChatProvider>
   );
 }

@@ -17,12 +17,15 @@ export default function Header() {
               <NavLink to="/chat-room">Chat</NavLink>
             </li>
             <li>
-              <NavLink to="/login" className="btn-action">
+              <NavLink to="/chat-api">Gmail</NavLink>
+            </li>
+            <li>
+              <NavLink to="/login-api" className="btn-action">
                 Login
               </NavLink>
             </li>
             <li>
-              <NavLink to="/register" className="btn-action">
+              <NavLink to="/register-api" className="btn-action">
                 Register
               </NavLink>
             </li>

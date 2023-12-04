@@ -23,7 +23,7 @@ const Chats = () => {
     currentUser?.uid && getChats();
   }, [currentUser?.uid]);
 
-  console.log(chats);
+  // console.log(chats);
 
   return (
     <div className="chat">

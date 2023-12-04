@@ -1,30 +1,58 @@
-import { useEffect } from "react";
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 import { auth } from "../firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
-
-const initialState = {
-  isAuthenticated: false,
-  user: null,
-};
-
-const SIGN_IN = "signIn";
+import { postRequest } from "../utils/service";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext(null);
 
-const AuthReducer = (state, action) => {
-  switch (action.type) {
-    case SIGN_IN:
-      break;
-
-    default:
-      break;
-  }
-};
-
 const AuthProvider = ({ children }) => {
+  const [token, setToken] = useState("");
+  const [user, setUser] = useState(null);
+  const [isAuthenticate, setIsAuthenticate] = useState(false);
+  // setUser => accessToken, user: {_id, name, email}
+  const [errMsg, setErrMsg] = useState("");
+
   const [isAuth, setIsAuth] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const navigate = useNavigate();
+
+  const loginUser = async (user) => {
+    try {
+      const result = await postRequest("/login", user);
+      setUser(result);
+      setToken(result?.accessToken);
+      setIsAuthenticate(true);
+      localStorage.setItem("token", result?.accessToken);
+      localStorage.setItem("user", JSON.stringify(result?.user));
+      setErrMsg("");
+      navigate("/chat-api");
+    } catch (error) {
+      setErrMsg(error.response?.data?.message);
+    }
+  };
+
+  const registerUser = async (user) => {
+    try {
+      const result = await postRequest("/register", user);
+      setUser(result);
+      setToken(result?.accessToken);
+      setIsAuthenticate(true);
+      localStorage.setItem("token", result?.accessToken);
+      localStorage.setItem("user", JSON.stringify(result?.user));
+      setErrMsg("");
+      navigate("/chat-api");
+    } catch (error) {
+      setErrMsg(error.response.data?.message);
+    }
+  };
+
+  const logoutUser = useCallback(() => {
+    setUser(null);
+    setToken("");
+    navigate("/login-api");
+    localStorage.clear();
+  }, []);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -34,16 +62,30 @@ const AuthProvider = ({ children }) => {
       }
     });
 
+    const token = localStorage.getItem("token");
+    const userJson = localStorage.getItem("user");
+    if (!!token) {
+      setToken(token);
+      setUser(userJson);
+      setIsAuthenticate(true);
+    }
+
     return () => {
       unsub();
     };
-  }, []);
+  }, [navigate]);
 
   return (
     <AuthContext.Provider
       value={{
         isAuth,
         currentUser,
+        user,
+        isAuthenticate,
+        errMsg,
+        registerUser,
+        loginUser,
+        logoutUser,
       }}
     >
       {children}

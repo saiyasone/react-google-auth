@@ -12,12 +12,12 @@ const ChatProvider = ({ children, user }) => {
     const getUserChats = async () => {
       try {
         setUserLoading(true);
-        if (user?._id) {
-          const response = await getRequest(`/chat/${user?.id}`);
-
+        const userJson = JSON.parse(user);
+        if (userJson._id) {
+          const response = await getRequest(`/chat/${userJson?.id}`);
           setUserChats(response);
-          setUserLoading(false);
         }
+        setUserLoading(false);
       } catch (error) {
         setUserLoading(false);
         setUserError(error);

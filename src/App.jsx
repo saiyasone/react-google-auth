@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router";
-import { useNavigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -9,7 +8,7 @@ import LoginAPI from "./components/chatAPI/login";
 import ChatRoom from "./pages/chatRoom";
 import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
-import ChatAPI from "./pages/ChatAPI";
+import ChatAPI from "./pages/ChatAPI/ChatAPI";
 import { ChatProvider } from "./context/ChatContext";
 
 import { ProtectRouteAPI } from "./guard/Auth";

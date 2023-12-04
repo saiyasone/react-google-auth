@@ -55,25 +55,27 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCurrentUser(user);
-        setIsAuth(true);
+    // const unsub = onAuthStateChanged(auth, (user) => {
+    //   if (user) {
+    //     setCurrentUser(user);
+    //     setIsAuth(true);
+    //   }
+    // });
+
+    const autoSignIn = () => {
+      const tokenJson = localStorage.getItem("token") ?? "";
+      const userJson = localStorage.getItem("user") ?? "";
+      if (tokenJson && userJson) {
+        setToken(JSON.parse(tokenJson));
+        setUser(JSON.parse(userJson));
+        setIsAuthenticate(true);
       }
-    });
-
-    const token = localStorage.getItem("token");
-    const userJson = localStorage.getItem("user");
-    if (!!token) {
-      setToken(token);
-      setUser(userJson);
-      setIsAuthenticate(true);
-    }
-
-    return () => {
-      unsub();
     };
-  }, [navigate]);
+    autoSignIn();
+    // return () => {
+    //   unsub();
+    // };
+  }, []);
 
   return (
     <AuthContext.Provider

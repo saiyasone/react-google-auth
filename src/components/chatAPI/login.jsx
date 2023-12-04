@@ -1,5 +1,7 @@
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import { Container, Button, Form } from "react-bootstrap";
+// import {} from "react";
 
 export default function LoginAPI() {
   const { errMsg, loginUser } = useAuth();
@@ -20,7 +22,7 @@ export default function LoginAPI() {
   }
   return (
     <>
-      <div className="container mt-4">
+      <Container>
         <div className="text-center text-danger">
           <h5> {errMsg} </h5>
         </div>
@@ -33,10 +35,9 @@ export default function LoginAPI() {
             <label htmlFor="" className="form-label">
               Email
             </label>
-            <input
+            <Form.Control
               type="email"
               name="email"
-              className="form-control"
               placeholder="example@gmail.com"
               onChange={(e) => handleChange(e)}
             />
@@ -45,22 +46,21 @@ export default function LoginAPI() {
             <label htmlFor="" className="form-label">
               Password
             </label>
-            <input
+            <Form.Control
               type="password"
               name="password"
-              className="form-control"
               placeholder="Password"
               onChange={(e) => handleChange(e)}
             />
           </div>
 
           <div className="mt-4">
-            <button type="submit" className="btn btn-primary w-100">
+            <Button type="submit" className="w-100" variant="primary">
               Login
-            </button>
+            </Button>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 }

@@ -13,5 +13,5 @@ export const getRequest = async (url) => {
   const response = await apiClient.get(url);
 
   const result = await response.data;
-  return result.data;
+  return result;
 };

@@ -18,7 +18,10 @@ code {
     monospace;
 }
 
-ul {
-  margin: 0;
+dl,
+ol,
+ul,
+li {
+  margin-bottom: 0;
   padding: 0;
 }

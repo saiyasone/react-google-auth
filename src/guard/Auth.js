@@ -1,11 +1,21 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
+
+export const ProtectRoute = ({ children }) => {
+  const { currentUser } = useAuth();
+  if (!!currentUser) {
+    return children;
+  }
+  return children;
+  // return <Navigate to="/login" />;
+};
+
 export const ProtectRouteAPI = ({ children }) => {
-  const navigate = useNavigate();
-  const { isAuthenticate } = useAuth();
-  if (!isAuthenticate) {
-    return navigate("/login-api");
+  const { token } = useAuth();
+
+  if (!token) {
+    return <Navigate to="/login-api" />;
   }
   return children;
 };

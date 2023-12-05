@@ -1,19 +1,19 @@
-import { createContext, useState, useEffect, useCallback } from "react";
 import { auth } from "../firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
+import { createContext, useState, useEffect, useCallback } from "react";
 import { postRequest } from "../utils/service";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState("");
+  const [userId, setUserId] = useState("");
   const [user, setUser] = useState(null);
   const [isAuthenticate, setIsAuthenticate] = useState(false);
   // setUser => accessToken, user: {_id, name, email}
   const [errMsg, setErrMsg] = useState("");
 
-  const [isAuth, setIsAuth] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
@@ -24,6 +24,7 @@ const AuthProvider = ({ children }) => {
       setToken(result?.accessToken);
       setIsAuthenticate(true);
       localStorage.setItem("token", result?.accessToken);
+      localStorage.setItem("userId", result?.user?._id);
       localStorage.setItem("user", JSON.stringify(result?.user));
       setErrMsg("");
       navigate("/chat-api");
@@ -39,7 +40,8 @@ const AuthProvider = ({ children }) => {
       setToken(result?.accessToken);
       setIsAuthenticate(true);
       localStorage.setItem("token", result?.accessToken);
-      localStorage.setItem("user", JSON.stringify(result?.user));
+      localStorage.setItem("user", result?.user);
+      localStorage.setItem("userId", result?.user?._id);
       setErrMsg("");
       navigate("/chat-api");
     } catch (error) {
@@ -47,12 +49,14 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const logoutUser = useCallback(() => {
-    setUser(null);
+  const logoutUser = () => {
     setToken("");
+    setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("id");
+    localStorage.removeItem("user");
     navigate("/login-api");
-    localStorage.clear();
-  }, []);
+  };
 
   useEffect(() => {
     // const unsub = onAuthStateChanged(auth, (user) => {
@@ -63,12 +67,14 @@ const AuthProvider = ({ children }) => {
     // });
 
     const autoSignIn = () => {
-      const tokenJson = localStorage.getItem("token") ?? "";
-      const userJson = localStorage.getItem("user") ?? "";
+      let tokenJson = window.localStorage.getItem("token");
+      let userId = window.localStorage.getItem("userId");
+      let userJson = window.localStorage.getItem("user");
       if (tokenJson && userJson) {
-        setToken(JSON.parse(tokenJson));
-        setUser(JSON.parse(userJson));
         setIsAuthenticate(true);
+        setToken(tokenJson);
+        setUser(userJson);
+        setUserId(userId);
       }
     };
     autoSignIn();
@@ -80,11 +86,12 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        isAuth,
         currentUser,
         user,
         isAuthenticate,
+        token,
         errMsg,
+        userId,
         registerUser,
         loginUser,
         logoutUser,
